@@ -15,6 +15,7 @@ import java.util.List;
 public class Main {
 
     Validator personalNumberValidator;
+    Validator cooordinationNumberValidator;
     BufferedReader inputReader;
 
     public Main() {
@@ -23,6 +24,14 @@ public class Main {
         personalNumberChecks.add(new ControlDigitCheck());
 
         personalNumberValidator = new Validator(personalNumberChecks);
+
+        List<ValidityCheck> cooordinationNumberChecks = new ArrayList<>();
+        cooordinationNumberChecks.add(new CoordinationDateCheck());
+        // There is some unneccesary repetition here, with the instantiation of
+        // a new ControlDigitCheck. We could avoid it with e.g. a singleton, but
+        // I'm leaving it as is. Good enough.
+        cooordinationNumberChecks.add(new ControlDigitCheck());
+        cooordinationNumberValidator = new Validator(cooordinationNumberChecks);
     }
 
     /**
@@ -33,8 +42,9 @@ public class Main {
 
         try {
             for (String line = inputReader.readLine(); line != null; line = inputReader.readLine()) {
-                if (!personalNumberValidator.canValidate(line)) {
-                    System.out.println("Could not validate " + line);
+                if (!personalNumberValidator.canValidate(line) &&
+                    !cooordinationNumberValidator.canValidate(line)) {
+                        System.out.println("Could not validate " + line);
                 }
             }
         } catch (IOException e) {
