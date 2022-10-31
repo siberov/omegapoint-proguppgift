@@ -16,6 +16,7 @@ public class Main {
 
     Validator personalNumberValidator;
     Validator cooordinationNumberValidator;
+    Validator organisationNumberValidator;
     BufferedReader inputReader;
 
     public Main() {
@@ -32,6 +33,11 @@ public class Main {
         // I'm leaving it as is. Good enough.
         cooordinationNumberChecks.add(new ControlDigitCheck());
         cooordinationNumberValidator = new Validator(cooordinationNumberChecks);
+        
+        List<ValidityCheck> organisationNumberChecks = new ArrayList<>();
+        organisationNumberChecks.add(new OrganisationNumberFormatCheck());
+        organisationNumberChecks.add(new ControlDigitCheck());
+        organisationNumberValidator = new Validator(organisationNumberChecks);
     }
 
     /**
@@ -43,7 +49,8 @@ public class Main {
         try {
             for (String line = inputReader.readLine(); line != null; line = inputReader.readLine()) {
                 if (!personalNumberValidator.canValidate(line) &&
-                    !cooordinationNumberValidator.canValidate(line)) {
+                    !cooordinationNumberValidator.canValidate(line) &&
+                    !organisationNumberValidator.canValidate(line)) {
                         System.out.println("Could not validate " + line);
                 }
             }
